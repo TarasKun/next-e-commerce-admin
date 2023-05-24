@@ -12,9 +12,11 @@ export default function ProductForm(props) {
         images: existingImages,
         category:assignedCategory,
         description: existingDescription,
+        properties:assignedProperties,
     } = props;
     const [title, setTitle] = useState(existingTitle || '');
     const [description, setDescription] = useState(existingDescription || '');
+    const [productProperties,setProductProperties] = useState(assignedProperties || {});
     const [price, setPrice] = useState(existingPrice || '');
     const [images, setImages] = useState(existingImages || []);
     const [category, setCategory] = useState(assignedCategory || '');
@@ -65,6 +67,14 @@ export default function ProductForm(props) {
         setImages(images);
     }
 
+    const setProductProp = (propName,value) => {
+        setProductProperties(prev => {
+            const newProductProps = {...prev};
+            newProductProps[propName] = value;
+            return newProductProps;
+        });
+    }
+
     const propertiesToFill = [];
 
     if (categories.length > 0 && category) {
@@ -76,6 +86,8 @@ export default function ProductForm(props) {
             catInfo = parentCat;
         }
     }
+
+
 
     return (
         <form onSubmit={handleProduct}>
@@ -95,6 +107,22 @@ export default function ProductForm(props) {
                     ))}
                 </select>
             </div>
+            {propertiesToFill.length > 0 && propertiesToFill.map(p => (
+                <div key={p.name} className="">
+                    <label>{p.name[0].toUpperCase()+p.name.substring(1)}</label>
+                    <div>
+                        <select value={productProperties[p.name]}
+                                onChange={ev =>
+                                    setProductProp(p.name,ev.target.value)
+                                }
+                        >
+                            {p.values.map(v => (
+                                <option key={v} value={v}>{v}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            ))}
             <label>Photos</label>
             <div className='mb-2 flex flex-wrap gap-2'>
                 <ReactSortable list={images} setList={updateImagesOrder} className="flex flex-wrap gap-1">
