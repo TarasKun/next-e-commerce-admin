@@ -99,7 +99,7 @@ export default function ProductForm(props) {
                 placeholder='product name'/>
             <div className='flex flex-col mb-2'>
                 <label>Category</label>
-                <select className='border border-gray-300 rounded-md px-1 w-full' value={category}
+                <select className='border border-gray-300 mb-1 rounded-md px-1 w-full' value={category}
                         onChange={ev => setCategory(ev.target.value)}>
                     <option value="">Uncategorized</option>
                     {categories.length > 0 && categories.map(c => (
@@ -107,20 +107,21 @@ export default function ProductForm(props) {
                     ))}
                 </select>
             </div>
-            {propertiesToFill.length > 0 && propertiesToFill.map(p => (
+            {propertiesToFill.length > 0 && propertiesToFill.map( p => (
                 <div key={p.name} className="">
-                    <label>{p.name[0].toUpperCase()+p.name.substring(1)}</label>
-                    <div>
-                        <select value={productProperties[p.name]}
-                                onChange={ev =>
-                                    setProductProp(p.name,ev.target.value)
-                                }
-                        >
-                            {p.values.map(v => (
-                                <option key={v} value={v}>{v}</option>
-                            ))}
-                        </select>
-                    </div>
+                    {p.name[0] && <label>{p.name[0]?.toUpperCase() + p.name.substring(1)}</label>}
+                    {p.name &&
+                        <div>
+                            <select className='border mb-1 border-gray-300 rounded-md px-1 w-full' value={productProperties[p.name]}
+                                    onChange={ev =>
+                                        setProductProp(p.name,ev.target.value)
+                                    }
+                            >
+                                {p.values.map(v => (
+                                    <option key={v} value={v}>{v}</option>
+                                ))}
+                            </select>
+                        </div>}
                 </div>
             ))}
             <label>Photos</label>
